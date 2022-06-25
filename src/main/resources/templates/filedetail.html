@@ -26,17 +26,16 @@
         </div>
 
         <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-            <h1 class="display-4 fw-normal">History</h1>
+            <h1 class="display-4 fw-normal">File detail</h1>
             <p class="fs-5 text-muted">Navid Radkusha</p>
         </div>
     </header>
     <div class="container">
-        <ul>
-            <li th:each="file : ${files}">
-                <a th:text="${file.getName()}" th:href="@{/filedetail(id=${file.getId()})}"></a>
-                <a th:text="Delete" th:href="@{/filedelete(id=${file.getId()})}"></a>
-            </li>
-        </ul>
+        Name: <p th:text="${file.getName()}"></p>
+        Array: <p th:text="${file.getFileList()}"></p>
+        <hr>
+        <p></p>
+        Result: <p th:text="${fileResult}"></p>
     </div>
 </div>
 
