@@ -11,9 +11,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+          distribution: 'adopt'
+          architecture: x64
 
       - name: Start MongoDB for integration test
         uses: supercharge/mongodb-github-action@1.7.0
@@ -21,11 +23,8 @@ jobs:
           mongodb-version: 4.2
           mongodb-port: 27018
 
-      - name: Build, test and package project
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=navPersia_six-letter-words
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
