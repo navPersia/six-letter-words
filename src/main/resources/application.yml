@@ -1,6 +1,0 @@
-spring:
-  data:
-    mongodb:
-      database: six-letter-words
-      host: mongodb
-      port: 27017
