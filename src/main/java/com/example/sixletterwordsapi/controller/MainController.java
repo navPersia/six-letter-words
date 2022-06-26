@@ -85,7 +85,7 @@ public class MainController {
             newArrayList = sixLetterCombination(noDuplicatedWord(listOfLines));
             model.addAttribute("arraytext", newArrayList);
         }catch (Exception e) {
-            System.out.println("somthing goes wrong");
+            System.out.println("something goes wrong");
             System.out.println(e);
         }
         return "result";
