@@ -1,0 +1,31 @@
+Six-letter-words
+1. when u navigate to the web application for the first time it take some seconds until it shows up, it's because of free hosting.
+2. the url to to web application is https://six-letter-words.herokuapp.com/
+3. on the website onder 'OpenAPI Specification' in navigation bar you can find the api routes onder Controller
+4. Unit test are written only for Api controller
+5. As bellow u wil find example queries for API
+<br>
+to result histories of file, files are stored in a non sql database
+GET https://six-letter-words.herokuapp.com/api/histories
+
+<br>
+To get the output of of given file
+GET https://six-letter-words.herokuapp.com/api/output
+
+<br>
+To get the result with given file as Json format, see the example json query
+Post https://six-letter-words.herokuapp.com/api/list
+
+{
+    "name": "file6",
+    "fileList": ["sa", "ma", "ne"]
+}
+
+<br>
+To get a specific file from database with is
+Get https://six-letter-words.herokuapp.com/api/filedetail/{id}
+
+id: 62b8c928da41085bc5e3ed53
+name: file1
+
+

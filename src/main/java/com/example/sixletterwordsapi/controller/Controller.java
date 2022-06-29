@@ -2,6 +2,7 @@ package com.example.sixletterwordsapi.controller;
 
 import com.example.sixletterwordsapi.model.FileInfo;
 import com.example.sixletterwordsapi.repository.SixLetterRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +54,7 @@ public class Controller {
             // If this element is not present in newList
             // If this element is smaller than 6 character
             // then add it
-            if (!listOfLinesNoDuplicated.contains(element) && element.length() < 6) {
+            if (!listOfLinesNoDuplicated.contains(element) && element.length() <= 6) {
                 listOfLinesNoDuplicated.add(element);
             }
         }
@@ -85,7 +89,7 @@ public class Controller {
                     newArrayList.add(e+n);
                 }
                 // check is the word has number of character that we need
-                if (!isWordComplete(e,n) && !isBiggerThan6(e+n)){
+                if (!isBiggerThan6(e+n)){
                     e += n;
                 }
             }
@@ -93,6 +97,7 @@ public class Controller {
         return newArrayList;
     }
 
+    @ApiOperation(value = "This method is used to get The result of given text file which is stored in project root onder resources.")
     @GetMapping("/api/output")
     public List<String> generatedfile () throws IOException {
         BufferedReader bufReader = new BufferedReader(new FileReader("src/main/resources/input.txt"));
@@ -107,12 +112,31 @@ public class Controller {
         return sixLetterCombination(noDuplicatedWord(listOfLines));
     }
 
+    @ApiOperation(value = "This method is used to get The history of searched file.")
     @GetMapping("/api/histories")
-    public List<FileInfo> fileInfos (){
-        return sixLetterRepository.findAll();
+    public Map<String, List<FileInfo>> fileInfos (){
+        HashMap<String, List<FileInfo>> map = new HashMap<>();
+        map.put("result", sixLetterRepository.findAll());
+        return map;
     }
+
+    @ApiOperation(value = "This method is used to get the file stored in database using id.")
     @GetMapping("/api/filedetail/{id}")
     public FileInfo fileInfo (@PathVariable String id){
         return sixLetterRepository.findById(id).get();
+    }
+
+    @ApiOperation(value = "This method is used to post a new file and get result of it, the file will save in database.")
+    @PostMapping("/api/list")
+    public Map<String, ArrayList<String>> fileInfo (@RequestBody FileInfo fileInfo){
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+
+        FileInfo file = new FileInfo(fileInfo.getName(),fileInfo.getFileList());
+        sixLetterRepository.save(file);
+        ArrayList<String> newArrayList;
+        newArrayList = sixLetterCombination(noDuplicatedWord(file.getFileList()));
+        map.put("result", newArrayList);
+
+        return map;
     }
 }

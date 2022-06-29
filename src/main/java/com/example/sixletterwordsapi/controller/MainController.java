@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -14,19 +15,20 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+@ApiIgnore
 @Controller
 public class MainController {
     @Autowired
     private SixLetterRepository sixLetterRepository;
 
+    // Create a new list without duplicated and words with more character than 6
     static ArrayList<String> noDuplicatedWord(ArrayList<String> listOfLines){
-        // Create a new list without duplicated and words with more character than 6
         ArrayList<String> listOfLinesNoDuplicated = new ArrayList<String>();
         for (String element : listOfLines) {
             // If this element is not present in newList
             // If this element is smaller than 6 character
             // then add it
-            if (!listOfLinesNoDuplicated.contains(element) && element.length() < 6) {
+            if (!listOfLinesNoDuplicated.contains(element) && element.length() <= 6) {
                 listOfLinesNoDuplicated.add(element);
             }
         }
@@ -61,7 +63,7 @@ public class MainController {
                     newArrayList.add(e+n);
                 }
                 // check is the word has number of character that we need
-                if (!isWordComplete(e,n) && !isBiggerThan6(e+n)){
+                if (!isBiggerThan6(e+n)){
                     e += n;
                 }
             }
